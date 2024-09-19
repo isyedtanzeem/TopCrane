@@ -4,7 +4,7 @@ import { ToWords } from 'to-words';
 import jsPDF from "jspdf";
 import BcsWaterMark from "./Images/Bcswatermark.png"; // Import your logo image
 import Head from "./Images/bcsInvoiceHead.png"; // Import your logo image
-import Footer from "./Images/Foot.png"; // Import your logo image
+import Footer from "./Images/InvoiceFoot.png"; // Import your logo image
 // import waterMark from "./Images/hmswatermark.png"; // Import your logo image
 
 import callIcon from "./Images/callicon.png"; // Import your logo image
@@ -62,6 +62,7 @@ let BcsInvoice = () => {
     mobile: "",
     address: "",
     gst: "",
+    gstNo: "",
    
   });
 
@@ -171,8 +172,7 @@ let BcsInvoice = () => {
     pdf.setFontSize(55);
 
     pdf.addImage(Head, "PNG", 12, 8,185,30);
-    // pdf.addImage(Footer, "PNG", 12, 240,185,30);
-   
+    pdf.addImage(Footer, "PNG", 12, 250,185,30);
 
     pdf.addImage(BcsWaterMark, "PNG", 50, 90, 110, 90);
         pdf.setFont(undefined, "bold");
@@ -183,32 +183,11 @@ let BcsInvoice = () => {
     pdf.setTextColor(0, 0, 0);
     pdf.setFontSize(14);
 
-    // pdf.setFontSize(9);
-    // pdf.text(13, 30, "No. 320,10th cross NGR Layout, Masjid Road,Roopena Agrahara, Bangalore - 560068");
-    // pdf.text(
-    //   13,
-    //   34,
-    //   "E-Mail :blrcraneservice@gmail.com             Web : www.bangalorecraneservice.com"
-    // );
-    // pdf.setFontSize(15);
-    // pdf.setFont(undefined, "bold");
 
-    // pdf.text(160, 18, "Invoice");
-
-
-
-    // Add a filled rectangular box to the PDF
-
-
-    // Set text color to white
-  
     pdf.setTextColor(0, 0, 0);
     pdf.setFontSize(16);
     pdf.setFont(undefined, "none");
-    // pdf.addImage(callIcon, "PNG", 144, 24, 13, 13);
-
-    // pdf.text(158, 30, "Huzaifa ");
-    // pdf.text(158, 36, "7204021703");
+   
     pdf.setFontSize(10);
     //input
     pdf.rect(12, 41, 95, 7);
@@ -219,16 +198,11 @@ let BcsInvoice = () => {
     pdf.text(`ADDRESS: ${formData.address}`, 13, 59.5, { align: "left" });
 
     let currentDate = new Date().toLocaleDateString();
-    var d = new Date(); 
-    var t = new Date().getTime();
-    var randomnum = Math.floor(Math.random() * (100 -  50000)) + 100;
-    randomnum = d.getFullYear() + (d.getMonth()+1) + (d.getDate()) + randomnum; 
-    randomnum = randomnum + t;
-    randomnum = randomnum - 1699000090000 ;
-    console.log(randomnum);
-    pdf.rect(107, 41, 90, 7);
     pdf.text(`DATE: ${currentDate}`, 108, 45.4);
-    pdf.text(`Invoice No: BCS${randomnum}`, 108, 52.5, { align: "left" });
+    pdf.rect(107, 41, 90, 7);
+    pdf.rect(137, 41, 60, 7);
+    pdf.text(`Invoice No: ${formData.invoiceNo}`, 138, 45.4, { align: "left" });
+    pdf.text(`Party's GSTIN: ${formData.gstNo}`, 108, 52.5, { align: "left" });
 
     pdf.rect(107, 48, 90, 7);
 
@@ -517,9 +491,28 @@ console.log(subTotal); // Output the subTotal
   return (
     <div className="form-container">
       {/* <h4><Link to="/">Go to Home</Link></h4> */}
-      <h4>TOP Crane Service Invoice</h4>
+     
 
       <form onSubmit={handleSubmit}>
+      
+      <div className="inline-container">
+  <div className="invoice-header">
+    <h4>TOP Crane Service Invoice</h4>
+  </div>
+
+  <div className="invoice-input">
+    <input
+      type="text"
+      id="invoiceNo"
+      placeholder="Invoice Number"
+      name="invoiceNo"
+      required
+      value={formData.invoiceNo}
+      onChange={handleInputChange}
+    />
+  </div>
+</div>
+
         <div className="display-inline">
           <div className="form-group">
             <input
@@ -568,10 +561,21 @@ console.log(subTotal); // Output the subTotal
             <input
               type="text"
               className="input margin"
-              placeholder="Gst"
+              placeholder="Gst percent"
               id="gst"
               name="gst"
               value={formData.gst}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="text"
+              className="input margin"
+              placeholder="Customer Gst Number "
+              id="gstNo"
+              name="gstNo"
+              value={formData.gstNo}
               onChange={handleInputChange}
             />
           </div>
@@ -602,7 +606,7 @@ console.log(subTotal); // Output the subTotal
               id="no1Rate"
               placeholder="Rate 1"
               name="no1Rate"
-            
+            required
               title="Please enter Rate"
               value={formData.no1Rate}
               onChange={handleInputChange}
