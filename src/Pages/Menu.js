@@ -12,7 +12,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 const Menu = () => {
   return (
     <div className="form-container">
-      <h2 className="headStyle">TOP Crane Service</h2>
+      <h2 className="headStyle">UJR Crane Service</h2>
       
       <div className="button-container">
         <Link to="/BcsQuotation" className="bcsbutton">

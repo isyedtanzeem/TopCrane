@@ -4,7 +4,7 @@ import { ToWords } from 'to-words';
 import jsPDF from "jspdf";
 import BcsWaterMark from "./Images/Bcswatermark.png"; // Import your logo image
 import Head from "./Images/Head.png"; // Import your logo image
-import Footer from "./Images/Foot.png"; // Import your logo image
+import Footer from "./Images/InvoiceFoot.png"; // Import your logo image
 // import waterMark from "./Images/hmswatermark.png"; // Import your logo image
 
 import callIcon from "./Images/callicon.png"; // Import your logo image
@@ -62,6 +62,7 @@ let BcsQuotation = () => {
     mobile: "",
     address: "",
     gst: "",
+    advanceAmount: ""
    
   });
 
@@ -530,7 +531,7 @@ if (isNaN(formData.advanceAmount) || formData.advanceAmount === 0) {
   return (
     <div className="form-container">
       {/* <h4><Link to="/">Go to Home</Link></h4> */}
-      <h4>TOP Crane Service Quotation</h4>
+      <h4>UJR Crane Service Quotation</h4>
 
       <form onSubmit={handleSubmit}>
         <div className="display-inline">
