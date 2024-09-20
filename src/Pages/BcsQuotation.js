@@ -229,7 +229,7 @@ let BcsQuotation = () => {
     console.log(randomnum);
     pdf.rect(107, 41, 90, 7);
     pdf.text(`DATE: ${currentDate}`, 108, 45.4);
-    pdf.text(`QUOTATION NO: BCS${randomnum}`, 108, 52.5, { align: "left" });
+    pdf.text(`QUOTATION NO: UJR${randomnum}`, 108, 52.5, { align: "left" });
     let revDom = formData.dom; // Assume this is the date from input in 'YYYY-MM-DD' format
 let reversedDom = revDom.split('-').reverse().join('-');
     pdf.text(`DATE OF MOVING: ${reversedDom}`, 108, 59.5, { align: "left" });
