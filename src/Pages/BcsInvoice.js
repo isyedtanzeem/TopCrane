@@ -68,11 +68,42 @@ let BcsInvoice = () => {
 
   let handleInputChange = (event) => {
     let { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  
+    // Check if the input is the GST dropdown
+    if (name === "gstOption") {
+      if (value === "9") {
+        setFormData((prevData) => ({
+          ...prevData,
+          gstOption: value,
+          gstOption9: '9',    // Store 9 in gstOption9
+          gstOption18: ''      // Clear gstOption18
+        }));
+      } else if (value === "18") {
+        setFormData((prevData) => ({
+          ...prevData,
+          gstOption: value,
+          gstOption9: '',      // Clear gstOption9
+          gstOption18: '18'    // Store 18 in gstOption18
+        }));
+      } else {
+        // Reset both when no valid option is selected
+        setFormData((prevData) => ({
+          ...prevData,
+          gstOption: '',
+          gstOption9: '',
+          gstOption18: ''
+        }));
+      }
+    } else {
+      // Handle other input changes normally
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
+  
+  
 
   let dateForCount = new Date();
 
@@ -381,10 +412,16 @@ let BcsInvoice = () => {
    
     pdf.rect(12, 178, 142, 10);
     pdf.rect(154, 178, 43, 10);
-    pdf.rect(12, 188, 142, 10);
-    pdf.rect(154, 188, 43, 10);
-    pdf.rect(12, 198, 142, 10);
-    pdf.rect(154, 198, 43, 10);
+
+    pdf.rect(12, 188, 142, 5);
+    pdf.rect(154, 188, 43, 5);
+    pdf.rect(12, 193, 142, 5);
+    pdf.rect(154, 193, 43, 5);
+    pdf.rect(12, 198, 142, 5);
+    pdf.rect(154, 198, 43, 5);
+
+    pdf.rect(12, 203, 142, 10);
+    pdf.rect(154, 203, 43, 10);
 
 
 
@@ -392,16 +429,19 @@ let BcsInvoice = () => {
     // pdf.rect(154, 182, 43, 10);
     // pdf.rect(12, 182, 142, 10);
     // pdf.rect(12, 223, 185, 50);
-    pdf.setFontSize(16);
-    pdf.setFont(undefined, "bold");
+    pdf.text(`Sub Total`, 125, 185);
+
+   
 
    
     
 
-    pdf.text(`Gst ${formData.gst}%`, 126, 195);
-    
-
+    pdf.text(`CGST ${formData.gstOption9}%`, 126, 191.5);
+    pdf.text(`SGST ${formData.gstOption9}%`, 126, 196.5);
+    pdf.text(`IGST ${formData.gstOption18}%`, 126, 201.5);
   
+
+    pdf.setFontSize(16);
     let a1 = parseInt(formData.no1Rate);
     let a2 = parseInt(formData.no2Rate);
     let a3 = parseInt(formData.no3Rate);
@@ -427,28 +467,46 @@ let BcsInvoice = () => {
     }
 });
 
-console.log(subTotal); // Output the subTotal
 
 
-      pdf.text(`Sub Total`, 125, 185);
-    pdf.text(`${subTotal}`, 182, 185,"right");
 
-    let gstTotal = parseInt(subTotal) * formData.gst;
-    let gstAmountTotal = gstTotal / 100;
 
-    if (isNaN(gstAmountTotal) || gstAmountTotal === 0 ) {
-      gstAmountTotal = "";
+
+
+
+     
+
+    let gstTotal18 = parseInt(subTotal) * formData.gstOption18;
+    let gstTotal9 = parseInt(subTotal) * formData.gstOption9;
+    let gstAmountTotal9 = gstTotal9 / 100;
+    let gstAmountTotal18 = gstTotal18 / 100;
+    
+    if (isNaN(gstAmountTotal9) || gstAmountTotal9 === 0 ) {
+      gstAmountTotal9 = "";
     }
-    pdf.text(`${gstAmountTotal}`, 182, 195,'right');
-  
-    pdf.text(` Grand Total`, 115, 205);
-    let grandTotal = (parseInt(gstAmountTotal) || 0) + parseInt(subTotal);
+    if (isNaN(gstAmountTotal18) || gstAmountTotal18 === 0 ) {
+      gstAmountTotal18 = "";
+    }
+   
+    pdf.setFontSize(12);
+    pdf.setFont(undefined, "none");
+    pdf.text(`${subTotal}`, 182, 185,"right");
+    pdf.text(`${gstAmountTotal9}`, 182, 192,'right');
+    pdf.text(`${gstAmountTotal9}`, 182, 197,'right');
+    pdf.text(`${gstAmountTotal18}`, 182, 202,'right');
+
+
+  let gstAmountTotal9Total = gstAmountTotal9 + gstAmountTotal9
+  pdf.setFont(undefined, "bold");
+    pdf.text(` Grand Total`, 115, 210);
+    let grandTotal = (gstAmountTotal9Total || gstAmountTotal18 || 0) + parseInt(subTotal);
 
 
     if (isNaN(grandTotal) || grandTotal === 0) {
       grandTotal = "";
     }
-    pdf.text(`${grandTotal}`, 182, 205,'right');
+   
+    pdf.text(`${grandTotal}`, 182, 210,'right');
     pdf.setFontSize(12);
 
     pdf.setFont(undefined, "none");
@@ -554,20 +612,24 @@ console.log(subTotal); // Output the subTotal
           </div>
          
         </div>
+
         <div className="display-inline">
-       
-       
-          <div className="form-group">
-            <input
-              type="text"
-              className="input margin"
-              placeholder="Gst percent"
-              id="gst"
-              name="gst"
-              value={formData.gst}
-              onChange={handleInputChange}
-            />
-          </div>
+  <div className="form-group">
+    <select
+      className="small-input margin"
+      id="gstOption"
+      name="gstOption"
+      value={formData.gstOption}
+      onChange={handleInputChange}
+    >
+      <option value="">Select GST Option</option>
+      <option value="9">CGST 9% + SGST 9%</option>
+      <option value="18">IGST 18%</option>
+    </select>
+  </div>
+
+
+
           <div className="form-group">
             <input
               type="text"

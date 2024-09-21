@@ -83,7 +83,15 @@ input {
   font-weight: bold;
   
 }
-
+.small-input {
+  height: 35px; /* Adjust height */
+  font-size: 12px !important; /* Force font size */
+ 
+   /* Optional: adjust padding */
+  -webkit-appearance: none; /* Remove default styling in WebKit browsers */
+  -moz-appearance: none; /* Remove default styling in Firefox */
+  appearance: none; /* Remove default styling in other browsers */
+}
 .submit-button {
   width: 100px;
   background-color: #007bff;
