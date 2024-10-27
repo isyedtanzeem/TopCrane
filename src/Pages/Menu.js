@@ -18,6 +18,9 @@ const Menu = () => {
         <Link to="/BcsQuotation" className="bcsbutton">
           Quotation
         </Link>
+        <Link to="/QuotationWithoutTotal" className="bcsbutton">
+          Quotation without Total
+        </Link>
         <Link to="/BcsInvoice" className="bcsbutton">
           Invoice
         </Link>

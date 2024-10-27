@@ -7,6 +7,7 @@ import './App.css';
 
 import BcsQuotation from './Pages/BcsQuotation';
 import BcsInvoice from './Pages/BcsInvoice';
+import QuotationWithoutTotal from './Pages/QuotationWithoutTotal';
 
 
 
@@ -23,6 +24,7 @@ class App extends Component {
              
               <Route exact path="/BcsQuotation" element={<BcsQuotation />} />
               <Route exact path="/BcsInvoice" element={<BcsInvoice />} />
+              <Route exact path="/QuotationWithoutTotal" element={<QuotationWithoutTotal />} />
             </Routes>
       
         </Router>
